@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slider One File</title>
+
+<style>
+* { 
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #b9bbb9;
+  overflow: hidden;
+}
+
+.container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 800px;
+  height: 400px;
+  background: #f5f5f5;
+  box-shadow: 0 30px 50px #dbdbdb;
+  border-radius: 20px;
+}
+
+.container .slide {
+  border-radius: 20px;
+}
+
+.container .slide .item {
+  width: 200px;
+  height: 250px;
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+  border-radius: 20px;
+  box-shadow: 0 30px 50px #505050;
+  background-position: 50% 50%;
+  background-size: cover;
+  display: inline-block;
+  transition: all 0.5s;
+}
+
+.slide .item:nth-child(1),
+.slide .item:nth-child(2) {
+  top: 0;
+  left: 0;
+  transform: translate(0, 0);
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+}
+
+.slide .item:nth-child(3) {
+  left: 50%;
+}
+.slide .item:nth-child(4) {
+  left: calc(50% + 220px);
+}
+.slide .item:nth-child(5) {
+  left: calc(50% + 440px);
+}
+
+.slide .item:nth-child(n + 6) {
+  left: calc(50% + 660px);
+  opacity: 0;
+}
+
+.item .content {
+  position: absolute;
+  top: 50%;
+  left: 100px;
+  width: 300px;
+  text-align: left;
+  color: #eee;
+  transform: translate(0, -50%);
+  font-family: system-ui;
+  display: none;
+}
+
+.slide .item:nth-child(2) .content {
+  display: block;
+}
+
+.content .name {
+  font-size: 40px;
+  text-transform: uppercase;
+  font-weight: bold;
+  opacity: 0;
+  animation: animate 1s ease-in-out 1 forwards;
+}
+
+.content .des {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: animate 1s ease-in-out 0.3s forwards;
+}
+
+.content button {
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  opacity: 0;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.673);
+  transition: all 0.5s;
+  animation: animate 1s ease-in-out 0.6s forwards;
+}
+
+.content button:hover {
+  background-color: white;
+}
+
+@keyframes animate {
+  from {
+    opacity: 0;
+    transform: translate(0, 100px);
+    filter: blur(33px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0);
+    filter: blur(0);
+  }
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  position: absolute;
+  width: 100%;
+  bottom: 20px;
+}
+
+.button button {
+  width: 40px;
+  height: 35px;
+  border-radius: 8px;
+  border: 2px solid #000000bd;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.578);
+  transition: 0.3s;
+}
+
+.button button:hover {
+  transform: scale(1.1);
+  border: 2px solid #fff;
+}
+
+.button button:focus {
+  transform: scale(1.1);
+  background: #fff;
+}
+
+.MDJAminDiv {
+  z-index: 4444;
+  position: fixed;
+  bottom: 5%;
+  left: 2%;
+}
+
+.MDJAmin {
+  text-decoration: none;
+  border-bottom: 1px dashed rgb(44, 44, 44);
+  border-top: 1px dashed rgb(44, 44, 44);
+  padding: 4px 0;
+  color: rgba(44, 44, 44, 0.525);
+  font-family: monospace;
+  font-style: italic;
+  font-size: 1.1em;
+  transition: all 0.5s;
+}
+
+.MDJAmin:hover {
+  color: black;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+  <div class="slide">
+
+    <div class="item" style="background-image:url('https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80');">
+      <div class="content">
+        <div class="name">Scotland</div>
+        <div class="des">Experience the mystical Highlands under twilight skies.</div>
+        <a class="seeMore" href="https://github.com/MDJAmin" target="_blank"><button>See More</button></a>
+      </div>
+    </div>
+
+    <div class="item" style="background-image:url('https://images.unsplash.com/photo-1439792675105-701e6a4ab6f0?q=80');">
+      <div class="content">
+        <div class="name">Norway</div>
+        <div class="des">Chase the Northern Lights under star-lit skies.</div>
+        <a class="seeMore" href="https://github.com/MDJAmin" target="_blank"><button>See More</button></a>
+      </div>
+    </div>
+
+    <div class="item" style="background-image:url('https://images.unsplash.com/photo-1483982258113-b72862e6cff6?q=80');">
+      <div class="content">
+        <div class="name">New Zealand</div>
+        <div class="des">Wander dramatic, misty mountain valleys.</div>
+        <a class="seeMore" href="https://github.com/MDJAmin" target="_blank"><button>See More</button></a>
+      </div>
+    </div>
+
+    <div class="item" style="background-image:url('https://images.unsplash.com/photo-1477346611705-65d1883cee1e?q=80');">
+      <div class="content">
+        <div class="name">Japan</div>
+        <div class="des">Discover ancient temples hidden in the forest mist.</div>
+        <a class="seeMore" href="https://github.com/MDJAmin" target="_blank"><button>See More</button></a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="button">
+    <button class="prev">◁</button>
+    <button class="next">▷</button>
+  </div>
+</div>
+
+<div class="MDJAminDiv">
+  <a class="MDJAmin" href="https://github.com/MDJAmin" target="_blank">MDJAmin</a>
+</div>
+
+<script>
+"use strict";
+
+let next = document.querySelector(".next");
+let prev = document.querySelector(".prev");
+
+next.addEventListener("click", function () {
+  let items = document.querySelectorAll(".item");
+  document.querySelector(".slide").appendChild(items[0]);
+});
+
+prev.addEventListener("click", function () {
+  let items = document.querySelectorAll(".item");
+  document.querySelector(".slide").prepend(items[items.length - 1]);
+});
+</script>
+
+</body>
+</html>
