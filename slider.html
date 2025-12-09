@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fruit Carousel</title>
+
+<style>
+body {
+  background: #eee;
+  font-family: "Tahoma";
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  margin: 0;
+  padding: 0;
+}
+
+#scene {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  width: 1000px;
+  height: 400px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12),
+              0 1px 2px rgba(0,0,0,0.24);
+  overflow: hidden;
+}
+
+#left-zone {
+  background: #fff;
+  height: 75%;
+  width: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+}
+
+#left-zone .list {
+  display: flex;
+  list-style: none;
+  flex-direction: column;
+  flex-grow: 1;
+  margin: 0;
+  padding: 0;
+}
+
+#left-zone .item input {
+  display: none;
+}
+
+#left-zone label {
+  display: block;
+  opacity: 0.5;
+  height: 50px;
+  text-align: center;
+  line-height: 50px;
+  position: relative;
+  padding-left: 70px;
+}
+
+#left-zone label:first-letter {
+  text-transform: capitalize;
+}
+
+#left-zone label:hover {
+  opacity: 0.75;
+  cursor: pointer;
+}
+
+/* Icons */
+.label_strawberry::before,
+.label_banana::before,
+.label_apple::before,
+.label_orange::before {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  margin-left: 15px;
+  top: 0;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 75%;
+}
+
+.label_strawberry::before {
+  background-image: url("https://d30y9cdsu7xlg0.cloudfront.net/png/83067-200.png");
+}
+.label_banana::before {
+  background-image: url("https://d30y9cdsu7xlg0.cloudfront.net/png/53209-200.png");
+}
+.label_apple::before {
+  background-image: url("https://d30y9cdsu7xlg0.cloudfront.net/png/14333-200.png");
+}
+.label_orange::before {
+  background-image: url("https://d30y9cdsu7xlg0.cloudfront.net/png/9636-200.png");
+}
+
+.content {
+  position: absolute;
+  left: 350px;
+  top: -400px;
+  width: 650px;
+  height: 400px;
+  animation-duration: .75s;
+  animation-name: slideout;
+  animation-timing-function: ease-out;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.content h1:first-letter {
+  text-transform: capitalize;
+}
+
+.content p {
+  max-width: 50%;
+  text-align: center;
+}
+
+/* Colors */
+.content_strawberry h1 { color: #D64541; }
+.content_banana h1    { color: #F5D76E; }
+.content_apple h1     { color: #00B16A; }
+.content_orange h1    { color: #F27935; }
+
+/* Icons inside content */
+.content .picto {
+  height: 100px;
+  width: 100px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.content_strawberry .picto {
+  background-image: url("https://d30y9cdsu7xlg0.cloudfront.net/png/83067-200.png");
+}
+.content_banana .picto {
+  background-image: url("https://d30y9cdsu7xlg0.cloudfront.net/png/53209-200.png");
+}
+.content_apple .picto {
+  background-image: url("https://d30y9cdsu7xlg0.cloudfront.net/png/14333-200.png");
+}
+.content_orange .picto {
+  background-image: url("https://d30y9cdsu7xlg0.cloudfront.net/png/9636-200.png");
+}
+
+/* Animations */
+@keyframes slidein {
+  0% { top: -400px; opacity: 0; }
+  100% { top: 0; opacity: 1; }
+}
+@keyframes slideout {
+  0% { top: 0; opacity: 1; }
+  100% { top: -400px; opacity: 0; }
+}
+
+input:checked + label {
+  opacity: 1;
+  transition: all .3s ease;
+}
+
+input#radio_strawberry:checked + label {
+  color: #D64541; border-right: 4px solid #D64541;
+}
+input#radio_banana:checked + label {
+  color: #F5D76E; border-right: 4px solid #F5D76E;
+}
+input#radio_apple:checked + label {
+  color: #00B16A; border-right: 4px solid #00B16A;
+}
+input#radio_orange:checked + label {
+  color: #F27935; border-right: 4px solid #F27935;
+}
+
+input:checked ~ .content {
+  animation-name: slidein;
+  animation-fill-mode: forwards;
+  animation-timing-function: cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
+
+/* Middle + right zone */
+#middle-border {
+  background-color: #eee;
+  height: 75%;
+  max-width: 2px;
+  flex-grow: 1;
+}
+
+#right-zone {
+  background: #fff;
+  height: 100%;
+  flex-grow: 3;
+}
+</style>
+</head>
+
+<body>
+
+<div id="scene">
+
+  <div id="left-zone">
+    <ul class="list">
+
+      <li class="item">
+        <input type="radio" id="radio_strawberry" name="basic_carousel" checked>
+        <label for="radio_strawberry" class="label_strawberry">strawberry</label>
+        <div class="content content_strawberry">
+          <span class="picto"></span>
+          <h1>strawberry</h1>
+          <p>The garden strawberry ... hybrid species of Fragaria.</p>
+        </div>
+      </li>
+
+      <li class="item">
+        <input type="radio" id="radio_banana" name="basic_carousel">
+        <label for="radio_banana" class="label_banana">banana</label>
+        <div class="content content_banana">
+          <span class="picto"></span>
+          <h1>banana</h1>
+          <p>A banana is an edible fruit ... genus Musa.</p>
+        </div>
+      </li>
+
+      <li class="item">
+        <input type="radio" id="radio_apple" name="basic_carousel">
+        <label for="radio_apple" class="label_apple">apple</label>
+        <div class="content content_apple">
+          <span class="picto"></span>
+          <h1>apple</h1>
+          <p>The apple tree ... cultivated worldwide.</p>
+        </div>
+      </li>
+
+      <li class="item">
+        <input type="radio" id="radio_orange" name="basic_carousel">
+        <label for="radio_orange" class="label_orange">orange</label>
+        <div class="content content_orange">
+          <span class="picto"></span>
+          <h1>orange</h1>
+          <p>The orange ... species Citrus × sinensis.</p>
+        </div>
+      </li>
+
+    </ul>
+  </div>
+
+  <div id="middle-border"></div>
+  <div id="right-zone"></div>
+
+</div>
+
+</body>
+</html>
