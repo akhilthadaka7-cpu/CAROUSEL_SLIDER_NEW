@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Infinite Course Carousel – Fixed</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{
+  --gap:20px;
+  --radius:16px;
+  --shadow:0 10px 25px rgba(0,0,0,.08);
+  --bg:#f5f7fb;
+  --card-bg:#fff;
+  --primary:#6c4cff;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
+}
+
+body{
+  background:var(--bg);
+  padding:40px 20px;
+}
+
+/* ===== WRAPPER ===== */
+.carousel-wrapper{
+  max-width:1300px;
+  margin:auto;
+  position:relative;
+  overflow:hidden;
+}
+
+/* ===== TRACK ===== */
+.carousel-track{
+  display:flex;
+  gap:var(--gap);
+  transition:transform .5s ease;
+  will-change:transform;
+}
+
+/* ===== CARD ===== */
+.course-card{
+  flex:0 0 auto;
+  background:var(--card-bg);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:14px;
+  display:flex;
+  flex-direction:column;
+  transition:transform .3s;
+}
+.course-card:hover{ transform:translateY(-6px); }
+
+/* IMAGE */
+.course-img{
+  height:150px;
+  border-radius:12px;
+  overflow:hidden;
+}
+.course-img img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* BADGES */
+.badges{
+  display:flex;
+  gap:8px;
+  margin-top:10px;
+}
+.badge{
+  font-size:12px;
+  font-weight:600;
+  padding:4px 10px;
+  border-radius:6px;
+}
+.badge.best{ background:#d7f3f1; color:#007a7a; }
+.badge.premium{ background:var(--primary); color:#fff; }
+
+/* TEXT */
+.course-title{
+  font-size:16px;
+  font-weight:600;
+  margin:12px 0 6px;
+}
+.course-author{
+  font-size:13px;
+  color:#666;
+}
+
+/* PRICE */
+.price{
+  margin-top:auto;
+  display:flex;
+  gap:10px;
+}
+.price .current{ font-weight:700; }
+.price .old{ color:#999; text-decoration:line-through; }
+
+/* ===== ARROWS ===== */
+.arrow{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  background:#fff;
+  box-shadow:0 6px 18px rgba(0,0,0,.18);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  z-index:10;
+}
+.arrow.left{ left:-18px; }
+.arrow.right{ right:-18px; }
+
+/* ===== RESPONSIVE WIDTH ===== */
+@media(min-width:1200px){ .course-card{ width:calc((100% - 60px)/4); } }
+@media(min-width:992px) and (max-width:1199px){ .course-card{ width:calc((100% - 40px)/3); } }
+@media(min-width:576px) and (max-width:991px){ .course-card{ width:calc((100% - 20px)/2); } }
+@media(max-width:575px){
+  .course-card{ width:80%; 
+    
+  }
+.course-card{ width:calc((100% - 10px)/1);
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="carousel-wrapper">
+  <div class="arrow left" id="prev">‹</div>
+  <div class="arrow right" id="next">›</div>
+
+  <div class="carousel-track" id="track">
+
+    <!-- ORIGINAL CARDS -->
+    <div class="course-card">
+      <div class="course-img"><img src="https://images.unsplash.com/photo-1518770660439-4636190af475"></div>
+      <div class="badges"><span class="badge best">Bestseller</span></div>
+      <div class="course-title">AI Engineer Course 2025</div>
+      <div class="course-author">365 Careers</div>
+      <div class="price"><span class="current">₹399</span><span class="old">₹3009</span></div>
+    </div>
+
+    <div class="course-card">
+      <div class="course-img"><img src="https://images.unsplash.com/photo-1535378917042-10a22c95931a"></div>
+      <div class="badges"><span class="badge best">Bestseller</span></div>
+      <div class="course-title">Intro to AI Agents</div>
+      <div class="course-author">365 Careers</div>
+      <div class="price"><span class="current">₹399</span><span class="old">₹799</span></div>
+    </div>
+
+    <div class="course-card">
+      <div class="course-img"><img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d"></div>
+      <div class="badges"><span class="badge best">Bestseller</span></div>
+      <div class="course-title">AI Automation with n8n</div>
+      <div class="course-author">KRISHAI</div>
+      <div class="price"><span class="current">₹399</span><span class="old">₹799</span></div>
+    </div>
+
+    <div class="course-card">
+      <div class="course-img"><img src="https://images.unsplash.com/photo-1555949963-aa79dcee981c"></div>
+      <div class="badges"><span class="badge premium">Premium</span></div>
+      <div class="course-title">AI Salesforce Development</div>
+      <div class="course-author">Matt Gerry</div>
+      <div class="price"><span class="current">₹399</span><span class="old">₹799</span></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const track = document.getElementById('track');
+const prevBtn = document.getElementById('prev');
+const nextBtn = document.getElementById('next');
+
+let cards = Array.from(track.children);
+let index = cards.length;
+let cardWidth;
+let gap = 20;
+
+/* CLONE */
+cards.forEach(card=>{
+  track.appendChild(card.cloneNode(true));
+});
+cards.forEach(card=>{
+  track.insertBefore(card.cloneNode(true), track.firstChild);
+});
+
+/* UPDATE */
+function update(){
+  cardWidth = cards[0].offsetWidth + gap;
+  track.style.transform = `translateX(-${index * cardWidth}px)`;
+}
+
+/* MOVE */
+function move(dir){
+  index += dir;
+  track.style.transition = 'transform .5s ease';
+  track.style.transform = `translateX(-${index * cardWidth}px)`;
+}
+
+/* LOOP FIX */
+track.addEventListener('transitionend', ()=>{
+  if(index >= cards.length * 2){
+    index = cards.length;
+    track.style.transition = 'none';
+    track.style.transform = `translateX(-${index * cardWidth}px)`;
+  }
+  if(index <= 0){
+    index = cards.length;
+    track.style.transition = 'none';
+    track.style.transform = `translateX(-${index * cardWidth}px)`;
+  }
+});
+
+prevBtn.onclick = ()=>move(-1);
+nextBtn.onclick = ()=>move(1);
+window.addEventListener('resize', update);
+
+update();
+</script>
+
+</body>
+</html>
