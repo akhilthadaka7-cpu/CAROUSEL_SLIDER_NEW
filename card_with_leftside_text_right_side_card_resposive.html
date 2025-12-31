@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infinite Responsive Carousel</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI', sans-serif;
+}
+
+body{
+  padding:50px;
+  background:#fff;
+}
+
+/* ================= LAYOUT ================= */
+.wrapper{
+  display:flex;
+  gap:40px;
+  align-items:center;
+}
+
+@media(max-width:991px){
+  .wrapper{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+}
+
+/* ================= TEXT ================= */
+.text{
+  max-width:360px;
+}
+.text h1{
+  font-size:36px;
+  font-weight:500;
+  color:#1c1d1f;
+}
+.text span{font-style:italic;}
+.text p{
+  margin-top:15px;
+  color:#6a6f73;
+  line-height:1.6;
+}
+
+/* ================= CAROUSEL ================= */
+.carousel{
+  width:100%;
+  max-width:980px;
+  overflow:hidden;
+}
+
+.track{
+  display:flex;
+  gap:24px;
+}
+
+/* ================= CARD ================= */
+.card{
+  height:360px;
+  padding:20px;
+  border-radius:22px;
+  display:flex;
+  align-items:flex-end;
+  background:linear-gradient(135deg,#57c78f,#7ee0ad);
+}
+
+.card:nth-child(2n){background:linear-gradient(135deg,#f7b7a3,#f9d6c8);}
+.card:nth-child(3n){background:linear-gradient(135deg,#b6def5,#d9f0ff);}
+
+/* ≥1361px → 3 cards */
+@media(min-width:1361px){
+  .card{ min-width:calc((100% - 48px) / 3); }
+}
+
+/* 991px – 1360px → 2 cards */
+@media(max-width:1360px){
+  .card{ min-width:calc((100% - 24px) / 2); }
+}
+
+/* ≤576px → 1 card */
+@media(max-width:576px){
+  .card{ min-width:100%; }
+}
+
+.card-content{
+  width:100%;
+  background:#fff;
+  padding:18px 20px;
+  border-radius:14px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+/* ================= CONTROLS ================= */
+.controls{
+  margin-top:25px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:18px;
+}
+
+.controls button{
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  border:none;
+  background:#fff;
+  cursor:pointer;
+  box-shadow:0 5px 15px rgba(0,0,0,.15);
+}
+
+/* ================= INDICATORS ================= */
+.indicators{
+  display:flex;
+  gap:10px;
+}
+
+.indicators span{
+  width:26px;
+  height:6px;
+  border-radius:6px;
+  border:2px dotted #c7cdd1;
+}
+
+.indicators .active{
+  background:#5624d0;
+  border:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+  <div class="text">
+    <h1>Learn <span>essential</span> career and life skills</h1>
+    <p>Build in-demand skills fast and advance your career in a changing job market.</p>
+  </div>
+
+  <div class="carousel" id="carousel">
+    <div class="track" id="track">
+
+      <!-- ===== 6 ORIGINAL CARDS ===== -->
+      <div class="card"><div class="card-content"><h3>Prompt Engineering</h3><i class="fa-solid fa-arrow-right"></i></div></div>
+      <div class="card"><div class="card-content"><h3>Microsoft Excel</h3><i class="fa-solid fa-arrow-right"></i></div></div>
+      <div class="card"><div class="card-content"><h3>Large Language Models</h3><i class="fa-solid fa-arrow-right"></i></div></div>
+      <div class="card"><div class="card-content"><h3>Web Development</h3><i class="fa-solid fa-arrow-right"></i></div></div>
+      <div class="card"><div class="card-content"><h3>UI / UX Design</h3><i class="fa-solid fa-arrow-right"></i></div></div>
+      <div class="card"><div class="card-content"><h3>Cloud Computing</h3><i class="fa-solid fa-arrow-right"></i></div></div>
+
+    </div>
+
+    <div class="controls">
+      <button id="prev"><i class="fa-solid fa-chevron-left"></i></button>
+
+      <div class="indicators" id="indicators">
+        <span class="active"></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+      <button id="next"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const carousel = document.getElementById('carousel');
+const track = document.getElementById('track');
+const prevBtn = document.getElementById('prev');
+const nextBtn = document.getElementById('next');
+const indicators = document.querySelectorAll('#indicators span');
+
+let originals = Array.from(track.children);
+const total = originals.length;
+let index = total;
+let cardWidth = 0;
+let isAnimating = false;
+let timer;
+
+/* ===== CLONE FOR INFINITE LOOP ===== */
+originals.forEach(card => {
+  track.appendChild(card.cloneNode(true));
+  track.insertBefore(card.cloneNode(true), track.firstChild);
+});
+
+/* ===== UPDATE SIZE ===== */
+function update(){
+  cardWidth = originals[0].offsetWidth + 24;
+  track.style.transition = 'none';
+  track.style.transform = `translateX(-${index * cardWidth}px)`;
+}
+
+/* ===== MOVE ===== */
+function move(dir){
+  if(isAnimating) return;
+  isAnimating = true;
+
+  index += dir;
+  track.style.transition = 'transform .55s cubic-bezier(.4,0,.2,1)';
+  track.style.transform = `translateX(-${index * cardWidth}px)`;
+
+  updateIndicators();
+}
+
+/* ===== LOOP FIX ===== */
+track.addEventListener('transitionend',()=>{
+  track.style.transition = 'none';
+
+  if(index >= total * 2){
+    index = total;
+  }
+  if(index < total){
+    index = total;
+  }
+
+  track.style.transform = `translateX(-${index * cardWidth}px)`;
+  requestAnimationFrame(()=>isAnimating=false);
+});
+
+/* ===== INDICATORS ===== */
+function updateIndicators(){
+  indicators.forEach(i=>i.classList.remove('active'));
+  indicators[index % total].classList.add('active');
+}
+
+/* ===== CONTROLS ===== */
+prevBtn.onclick = ()=>move(-1);
+nextBtn.onclick = ()=>move(1);
+
+/* ===== AUTOPLAY ===== */
+function start(){
+  stop();
+  timer = setInterval(()=>move(1),3500);
+}
+function stop(){
+  if(timer) clearInterval(timer);
+}
+
+carousel.addEventListener('mouseenter',stop);
+carousel.addEventListener('mouseleave',start);
+window.addEventListener('resize',update);
+
+/* ===== INIT ===== */
+update();
+start();
+</script>
+
+</body>
+</html>
